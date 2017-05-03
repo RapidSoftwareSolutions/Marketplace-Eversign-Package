@@ -1,0 +1,511 @@
+{
+  "package": "Eversign",
+  "tagline": "Eversign API",
+  "description": "",
+  "image": "",
+  "repo": "",
+  "keywords": [],
+  "accounts": {
+    "domain": "eversign.com",
+    "credentials": [
+      "accessKey"
+    ]
+  },
+  "blocks": [
+    {
+      "name": "getBusinesses",
+      "description": "A list of existing businesses on your eversign account",
+      "args": [
+        {
+          "name": "accessKey",
+          "type": "credentials",
+          "info": "Access Key",
+          "required": true
+        }
+      ],
+      "callbacks": [
+        {
+          "name": "error",
+          "info": "Error"
+        },
+        {
+          "name": "success",
+          "info": "Success"
+        }
+      ]
+    },
+    {
+      "name": "getDocuments",
+      "description": "A list of existing documents",
+      "args": [
+        {
+          "name": "accessKey",
+          "type": "credentials",
+          "info": "Access Key",
+          "required": true
+        },
+        {
+          "name": "businessId",
+          "type": "Number",
+          "info": "Business ID",
+          "required": true
+        },
+        {
+          "name": "type",
+          "type": "String",
+          "info": "Document status. This parameter accepts the following status values: all, my_action_required, waiting_for_others, completed, drafts, cancelled",
+          "required": true
+        }
+      ],
+      "callbacks": [
+        {
+          "name": "error",
+          "info": "Error"
+        },
+        {
+          "name": "success",
+          "info": "Success"
+        }
+      ]
+    },
+    {
+      "name": "getSingleDocument",
+      "description": "Get an existing document or template",
+      "args": [
+        {
+          "name": "accessKey",
+          "type": "credentials",
+          "info": "Access Key",
+          "required": true
+        },
+        {
+          "name": "businessId",
+          "type": "Number",
+          "info": "Business ID",
+          "required": true
+        },
+        {
+          "name": "documentHash",
+          "type": "String",
+          "info": "Document hash (id)",
+          "required": true
+        }
+      ],
+      "callbacks": [
+        {
+          "name": "error",
+          "info": "Error"
+        },
+        {
+          "name": "success",
+          "info": "Success"
+        }
+      ]
+    },
+    {
+      "name": "createDocument",
+      "description": "Create document",
+      "args": [
+        {
+          "name": "accessKey",
+          "type": "credentials",
+          "info": "Access Key",
+          "required": true
+        },
+        {
+          "name": "businessId",
+          "type": "Number",
+          "info": "Business ID",
+          "required": true
+        },
+        {
+          "name": "isDraft",
+          "type": "Boolean",
+          "info": "Set to 1 in order to save this document as a draft. Default: false",
+          "required": false
+        },
+        {
+          "name": "title",
+          "type": "String",
+          "info": "This parameter is used in order to specify a document title. Default: -",
+          "required": false
+        },
+        {
+          "name": "message",
+          "type": "String",
+          "info": "This parameter is used in order to specify a document message. Default: -",
+          "required": false
+        },
+        {
+          "name": "useSignerOrder",
+          "type": "Boolean",
+          "info": "Set to 1 in order to enable Signing Order for this document. Default: false",
+          "required": false
+        },
+        {
+          "name": "reminders",
+          "type": "Boolean",
+          "info": "Set to 1 in order to enable Auto Reminders for this document. Default: false",
+          "required": false
+        },
+        {
+          "name": "requireAllSigners",
+          "type": "Boolean",
+          "info": "Set to 1 in order to require all signers to sign to complete this document. Default: false",
+          "required": false
+        },
+        {
+          "name": "redirect",
+          "type": "String",
+          "info": "This parameter is used to specify a custom completion redirect URL. If empty, the default Post-Sign Completion URL specified in your eversign Business or the eversign signature completion page will be used.",
+          "required": false
+        },
+        {
+          "name": "client",
+          "type": "String",
+          "info": "This parameter is used to specify an internal reference for your application, such as an identification string of the server or client making the API request.",
+          "required": false
+        },
+        {
+          "name": "expires",
+          "type": "String",
+          "info": "This parameter is used to specify a custom expiration date for your document. (Required format: Unix Time Stamp) If empty, the default document expiration period specified in your business settings will be used.",
+          "required": false
+        },
+        {
+          "name": "files",
+          "type": "JSON",
+          "info": "Document files can be uploaded to your document either by providing a URL, a reference to an existing file ID or through a base64 string. This object can contain multiple sub arrays.",
+          "required": true
+        },
+        {
+          "name": "signers",
+          "type": "JSON",
+          "info": "This object must contain a sub array for each signer of the document being created. Each sub array requires a unique ID, name and email address.",
+          "required": true
+        },
+        {
+          "name": "recipients",
+          "type": "JSON",
+          "info": "This object can contain a sub array for each CC of the document to be signed. Name and email",
+          "required": false
+        },
+        {
+          "name": "meta",
+          "type": "JSON",
+          "info": "This object contains optional key-value data that should be attached to the document. This data will be included when making a GET call for the document created.",
+          "required": false
+        },
+        {
+          "name": "fields",
+          "type": "JSON",
+          "info": "The fields that should be placed on the document, expressed as a 2-dimensional JSON array. One array of fields is required for each file provided in the files object. If a file has no fields, an empty array must be provided. ",
+          "required": false
+        }
+      ],
+      "callbacks": [
+        {
+          "name": "error",
+          "info": "Error"
+        },
+        {
+          "name": "success",
+          "info": "Success"
+        }
+      ]
+    },
+    {
+      "name": "useTemplate",
+      "description": "Use template",
+      "args": [
+        {
+          "name": "accessKey",
+          "type": "credentials",
+          "info": "Access Key",
+          "required": true
+        },
+        {
+          "name": "businessId",
+          "type": "Number",
+          "info": "Business ID",
+          "required": true
+        },
+        {
+          "name": "templateId",
+          "type": "String",
+          "info": "Set to the Template ID of the template you would like to use.",
+          "required": true
+        },
+        {
+          "name": "title",
+          "type": "String",
+          "info": "This parameter is used in order to specify a document title.",
+          "required": false
+        },
+        {
+          "name": "message",
+          "type": "String",
+          "info": "This parameter is used in order to specify a document message.",
+          "required": false
+        },
+        {
+          "name": "redirect",
+          "type": "String",
+          "info": "This parameter is used to specify a custom completion redirect URL. If empty, the default Post-Sign Completion URL specified in your eversign Business or the eversign signature completion page will be used.",
+          "required": false
+        },
+        {
+          "name": "client",
+          "type": "String",
+          "info": "This parameter is used to specify an internal reference for your application, such as an identification string of the server or client making the API request.",
+          "required": false
+        },
+        {
+          "name": "expires",
+          "type": "String",
+          "info": "This parameter is used to specify a custom expiration date for your document. (Required format: Unix Time Stamp) If empty, the default document expiration period specified in your business settings will be used.",
+          "required": false
+        },
+        {
+          "name": "signers",
+          "type": "JSON",
+          "info": "This object must contain a sub array for each signing role of your template.",
+          "required": true
+        },
+        {
+          "name": "recipients",
+          "type": "JSON",
+          "info": "This object can contain a sub array for each CC of the document to be signed. Name and email",
+          "required": false
+        },
+        {
+          "name": "fields",
+          "type": "JSON",
+          "info": "This object must contain a sub array for each Merge Field of this template.",
+          "required": false
+        }
+      ],
+      "callbacks": [
+        {
+          "name": "error",
+          "info": "Error"
+        },
+        {
+          "name": "success",
+          "info": "Success"
+        }
+      ]
+    },
+    {
+      "name": "cancelDocument",
+      "description": "Cancel document",
+      "args": [
+        {
+          "name": "accessKey",
+          "type": "credentials",
+          "info": "Access Key",
+          "required": true
+        },
+        {
+          "name": "businessId",
+          "type": "Number",
+          "info": "Business ID",
+          "required": true
+        },
+        {
+          "name": "documentHash",
+          "type": "String",
+          "info": "Document hash (id)",
+          "required": true
+        }
+      ],
+      "callbacks": [
+        {
+          "name": "error",
+          "info": "Error"
+        },
+        {
+          "name": "success",
+          "info": "Success"
+        }
+      ]
+    },
+    {
+      "name": "deleteDocument",
+      "description": "Delete document by hash. Only status cancelled or draft",
+      "args": [
+        {
+          "name": "accessKey",
+          "type": "credentials",
+          "info": "Access Key",
+          "required": true
+        },
+        {
+          "name": "businessId",
+          "type": "Number",
+          "info": "Business ID",
+          "required": true
+        },
+        {
+          "name": "documentHash",
+          "type": "String",
+          "info": "Document hash (id)",
+          "required": true
+        }
+      ],
+      "callbacks": [
+        {
+          "name": "error",
+          "info": "Error"
+        },
+        {
+          "name": "success",
+          "info": "Success"
+        }
+      ]
+    },
+    {
+      "name": "downloadOriginalPDF",
+      "description": "Download original PDF file",
+      "args": [
+        {
+          "name": "accessKey",
+          "type": "credentials",
+          "info": "Access Key",
+          "required": true
+        },
+        {
+          "name": "businessId",
+          "type": "Number",
+          "info": "Business ID",
+          "required": true
+        },
+        {
+          "name": "documentHash",
+          "type": "String",
+          "info": "Document hash (id)",
+          "required": true
+        }
+      ],
+      "callbacks": [
+        {
+          "name": "error",
+          "info": "Error"
+        },
+        {
+          "name": "success",
+          "info": "Success"
+        }
+      ]
+    },
+    {
+      "name": "downloadFinalPDF",
+      "description": "Download final PDF file",
+      "args": [
+        {
+          "name": "accessKey",
+          "type": "credentials",
+          "info": "Access Key",
+          "required": true
+        },
+        {
+          "name": "businessId",
+          "type": "Number",
+          "info": "Business ID",
+          "required": true
+        },
+        {
+          "name": "documentHash",
+          "type": "String",
+          "info": "Document hash (id)",
+          "required": true
+        }
+      ],
+      "callbacks": [
+        {
+          "name": "error",
+          "info": "Error"
+        },
+        {
+          "name": "success",
+          "info": "Success"
+        }
+      ]
+    },
+    {
+      "name": "uploadFile",
+      "description": "Upload file",
+      "args": [
+        {
+          "name": "accessKey",
+          "type": "credentials",
+          "info": "Access Key",
+          "required": true
+        },
+        {
+          "name": "businessId",
+          "type": "Number",
+          "info": "Business ID",
+          "required": true
+        },
+        {
+          "name": "file",
+          "type": "File",
+          "info": "File to upload",
+          "required": true
+        }
+      ],
+      "callbacks": [
+        {
+          "name": "error",
+          "info": "Error"
+        },
+        {
+          "name": "success",
+          "info": "Success"
+        }
+      ]
+    },
+    {
+      "name": "sendReminder",
+      "description": "A reminder can be sent on a per-signer basis only.",
+      "args": [
+        {
+          "name": "accessKey",
+          "type": "credentials",
+          "info": "Access Key",
+          "required": true
+        },
+        {
+          "name": "businessId",
+          "type": "Number",
+          "info": "Business ID",
+          "required": true
+        },
+        {
+          "name": "documentHash",
+          "type": "String",
+          "info": "Document hash (id)",
+          "required": true
+        },
+        {
+          "name": "signerId",
+          "type": "Number",
+          "info": "Signer ID",
+          "required": true
+        }
+      ],
+      "callbacks": [
+        {
+          "name": "error",
+          "info": "Error"
+        },
+        {
+          "name": "success",
+          "info": "Success"
+        }
+      ]
+    }
+  ]
+}
+
