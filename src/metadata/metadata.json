@@ -1,10 +1,14 @@
 {
   "package": "Eversign",
   "tagline": "Eversign API",
-  "description": "",
-  "image": "",
-  "repo": "",
-  "keywords": [],
+  "description": "Securely approve, deliver and sign documents online",
+  "image": "https://logo.clearbit.com/https://eversign.com/?s=128",
+  "repo": "https://github.com/RapidSoftwareSolutions/Marketplace-Eversign-Package",
+  "keywords": [
+    "documents",
+    "sign",
+    "Workflow"
+  ],
   "accounts": {
     "domain": "eversign.com",
     "credentials": [
