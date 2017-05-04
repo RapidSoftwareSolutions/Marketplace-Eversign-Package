@@ -59,19 +59,19 @@ $app->post('/api/Eversign/createDocument', function ($request, $response) {
     if (isset($postData['args']['expires']) && strlen($postData['args']['expires']) > 0) {
         $json['expires'] = $postData['args']['expires'];
     }
-    if (isset($postData['args']['recipients'])) {
+    if (!empty($postData['args']['recipients'])) {
         $json['recipients'] = json_decode($postData['args']['recipients'], true);
         if (json_last_error()) {
             $jsonErrors[] = 'recipients';
         }
     }
-    if (isset($postData['args']['meta'])) {
+    if (!empty($postData['args']['meta'])) {
         $json['meta'] = json_decode($postData['args']['meta'], true);
         if (json_last_error()) {
             $jsonErrors[] = 'meta';
         }
     }
-    if (isset($postData['args']['fields'])) {
+    if (!empty($postData['args']['fields'])) {
         $json['fields'] = json_decode($postData['args']['fields'], true);
         if (json_last_error()) {
             $jsonErrors[] = 'fields';
