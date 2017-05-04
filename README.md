@@ -32,7 +32,8 @@ Get an existing document or template
 | documentHash| String     | Document hash (id)
 
 ## Eversign.createDocument
-Create document
+Create documentю
+JSON structure you can see at [createDocument vendor API](https://eversign.com/api/documentation/methods#create-document)
 
 | Field            | Type       | Description
 |------------------|------------|----------
@@ -55,6 +56,7 @@ Create document
 
 ## Eversign.useTemplate
 Use template
+JSON structure you can see at [useTemplate vendor API](https://eversign.com/api/documentation/methods#use-template)
 
 | Field     | Type       | Description
 |-----------|------------|----------
