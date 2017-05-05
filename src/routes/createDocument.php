@@ -23,13 +23,45 @@ $app->post('/api/Eversign/createDocument', function ($request, $response) {
 
     $jsonErrors = [];
 
-    $json['files'] = json_decode($postData['args']['files'], true);
+    $toJson = new \Models\normilizeJson();
+
+    $data = $toJson->normalizeJson($postData['args']['files']);
+    $data = str_replace('\"', '"', $data);
+    $json['files'] = json_decode($data, true);
     if (json_last_error()) {
         $jsonErrors[] = 'files';
     }
-    $json['signers'] = json_decode($postData['args']['signers'], true);
+
+    $dataSigners = $toJson->normalizeJson($postData['args']['signers']);
+    $dataSigners = str_replace('\"', '"', $dataSigners);
+    $json['signers'] = json_decode($dataSigners, true);
     if (json_last_error()) {
         $jsonErrors[] = 'signers';
+    }
+
+    if (!empty($postData['args']['recipients'])) {
+        $dataRecipients = $toJson->normalizeJson($postData['args']['recipients']);
+        $dataRecipients = str_replace('\"', '"', $dataRecipients);
+        $json['recipients'] = json_decode($dataRecipients, true);
+        if (json_last_error()) {
+            $jsonErrors[] = 'recipients';
+        }
+    }
+    if (!empty($postData['args']['meta'])) {
+        $dataMeta = $toJson->normalizeJson($postData['args']['recipients']);
+        $dataMeta = str_replace('\"', '"', $dataMeta);
+        $json['meta'] = json_decode($dataMeta, true);
+        if (json_last_error()) {
+            $jsonErrors[] = 'meta';
+        }
+    }
+    if (!empty($postData['args']['fields'])) {
+        $dataFields = $toJson->normalizeJson($postData['args']['fields']);
+        $dataFields = str_replace('\"', '"', $dataFields);
+        $json['fields'] = json_decode($dataFields, true);
+        if (json_last_error()) {
+            $jsonErrors[] = 'fields';
+        }
     }
 
     if (isset($postData['args']['isDraft']) && filter_var($postData['args']['isDraft'], FILTER_VALIDATE_BOOLEAN) == true) {
@@ -58,24 +90,6 @@ $app->post('/api/Eversign/createDocument', function ($request, $response) {
     }
     if (isset($postData['args']['expires']) && strlen($postData['args']['expires']) > 0) {
         $json['expires'] = $postData['args']['expires'];
-    }
-    if (!empty($postData['args']['recipients'])) {
-        $json['recipients'] = json_decode($postData['args']['recipients'], true);
-        if (json_last_error()) {
-            $jsonErrors[] = 'recipients';
-        }
-    }
-    if (!empty($postData['args']['meta'])) {
-        $json['meta'] = json_decode($postData['args']['meta'], true);
-        if (json_last_error()) {
-            $jsonErrors[] = 'meta';
-        }
-    }
-    if (!empty($postData['args']['fields'])) {
-        $json['fields'] = json_decode($postData['args']['fields'], true);
-        if (json_last_error()) {
-            $jsonErrors[] = 'fields';
-        }
     }
 
     if (empty($jsonErrors)) {
