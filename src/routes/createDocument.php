@@ -25,42 +25,67 @@ $app->post('/api/Eversign/createDocument', function ($request, $response) {
 
     $toJson = new \Models\normilizeJson();
 
-    $data = $toJson->normalizeJson($postData['args']['files']);
-    $data = str_replace('\"', '"', $data);
-    $json['files'] = json_decode($data, true);
-    if (json_last_error()) {
-        $jsonErrors[] = 'files';
+    if (is_array($postData['args']['files'])) {
+        $json['files'] = $postData['args']['files'];
+    }
+    else {
+        $data = $toJson->normalizeJson($postData['args']['files']);
+        $data = str_replace('\"', '"', $data);
+        $json['files'] = json_decode($data, true);
+        if (json_last_error()) {
+            $jsonErrors[] = 'files';
+        }
     }
 
-    $dataSigners = $toJson->normalizeJson($postData['args']['signers']);
-    $dataSigners = str_replace('\"', '"', $dataSigners);
-    $json['signers'] = json_decode($dataSigners, true);
-    if (json_last_error()) {
-        $jsonErrors[] = 'signers';
+    if (is_array($postData['args']['signers'])) {
+        $json['signers'] = $postData['args']['signers'];
+    }
+    else {
+        $dataSigners = $toJson->normalizeJson($postData['args']['signers']);
+        $dataSigners = str_replace('\"', '"', $dataSigners);
+        $json['signers'] = json_decode($dataSigners, true);
+        if (json_last_error()) {
+            $jsonErrors[] = 'signers';
+        }
     }
 
     if (!empty($postData['args']['recipients'])) {
-        $dataRecipients = $toJson->normalizeJson($postData['args']['recipients']);
-        $dataRecipients = str_replace('\"', '"', $dataRecipients);
-        $json['recipients'] = json_decode($dataRecipients, true);
-        if (json_last_error()) {
-            $jsonErrors[] = 'recipients';
+        if (is_array($postData['args']['recipients'])) {
+            $json['recipients'] = $postData['args']['recipients'];
+        }
+        else {
+            $dataRecipients = $toJson->normalizeJson($postData['args']['recipients']);
+            $dataRecipients = str_replace('\"', '"', $dataRecipients);
+            $json['recipients'] = json_decode($dataRecipients, true);
+            if (json_last_error()) {
+                $jsonErrors[] = 'recipients';
+            }
         }
     }
     if (!empty($postData['args']['meta'])) {
-        $dataMeta = $toJson->normalizeJson($postData['args']['recipients']);
-        $dataMeta = str_replace('\"', '"', $dataMeta);
-        $json['meta'] = json_decode($dataMeta, true);
-        if (json_last_error()) {
-            $jsonErrors[] = 'meta';
+        if (is_array($postData['args']['meta'])) {
+            $json['meta'] = $postData['args']['meta'];
+        }
+        else {
+            $dataMeta = $toJson->normalizeJson($postData['args']['recipients']);
+            $dataMeta = str_replace('\"', '"', $dataMeta);
+            $json['meta'] = json_decode($dataMeta, true);
+            if (json_last_error()) {
+                $jsonErrors[] = 'meta';
+            }
         }
     }
     if (!empty($postData['args']['fields'])) {
-        $dataFields = $toJson->normalizeJson($postData['args']['fields']);
-        $dataFields = str_replace('\"', '"', $dataFields);
-        $json['fields'] = json_decode($dataFields, true);
-        if (json_last_error()) {
-            $jsonErrors[] = 'fields';
+        if (is_array($postData['args']['fields'])) {
+            $json['fields'] = $postData['args']['fields'];
+        }
+        else {
+            $dataFields = $toJson->normalizeJson($postData['args']['fields']);
+            $dataFields = str_replace('\"', '"', $dataFields);
+            $json['fields'] = json_decode($dataFields, true);
+            if (json_last_error()) {
+                $jsonErrors[] = 'fields';
+            }
         }
     }
 
