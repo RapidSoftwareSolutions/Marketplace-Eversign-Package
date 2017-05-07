@@ -27,27 +27,29 @@ $app->post('/api/Eversign/useTemplate', function ($request, $response) {
 
     $toJson = new \Models\normilizeJson();
 
-    if (is_array($postData['args']['files'])) {
-        $json['files'] = $postData['args']['files'];
-    }
-    else {
-        $data = $toJson->normalizeJson($postData['args']['files']);
-        $data = str_replace('\"', '"', $data);
-        $json['files'] = json_decode($data, true);
-        if (json_last_error()) {
-            $jsonErrors[] = 'files';
+    if (!empty($postData['args']['files'])) {
+        if (is_array($postData['args']['files'])) {
+            $json['files'] = $postData['args']['files'];
+        } else {
+            $data = $toJson->normalizeJson($postData['args']['files']);
+            $data = str_replace('\"', '"', $data);
+            $json['files'] = json_decode($data, true);
+            if (json_last_error()) {
+                $jsonErrors[] = 'files';
+            }
         }
     }
 
-    if (is_array($postData['args']['signers'])) {
-        $json['signers'] = $postData['args']['signers'];
-    }
-    else {
-        $dataSigners = $toJson->normalizeJson($postData['args']['signers']);
-        $dataSigners = str_replace('\"', '"', $dataSigners);
-        $json['signers'] = json_decode($dataSigners, true);
-        if (json_last_error()) {
-            $jsonErrors[] = 'signers';
+    if (!empty($postData['args']['signers'])) {
+        if (is_array($postData['args']['signers'])) {
+            $json['signers'] = $postData['args']['signers'];
+        } else {
+            $dataSigners = $toJson->normalizeJson($postData['args']['signers']);
+            $dataSigners = str_replace('\"', '"', $dataSigners);
+            $json['signers'] = json_decode($dataSigners, true);
+            if (json_last_error()) {
+                $jsonErrors[] = 'signers';
+            }
         }
     }
 
