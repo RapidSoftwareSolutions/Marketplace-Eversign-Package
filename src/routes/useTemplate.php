@@ -63,6 +63,7 @@ $app->post('/api/Eversign/useTemplate', function ($request, $response) {
             }
         }
     }
+
     if (!empty($postData['args']['meta'])) {
         if (is_array($postData['args']['meta'])) {
             $json['meta'] = $postData['args']['meta'];
@@ -102,12 +103,6 @@ $app->post('/api/Eversign/useTemplate', function ($request, $response) {
     }
     if (isset($postData['args']['expires']) && strlen($postData['args']['expires']) > 0) {
         $json['expires'] = $postData['args']['expires'];
-    }
-    if (isset($postData['args']['recipients'])) {
-        $json['recipients'] = json_decode($postData['args']['recipients'], true);
-        if (json_last_error()) {
-            $jsonErrors[] = 'recipients';
-        }
     }
 
     if (empty($jsonErrors)) {
