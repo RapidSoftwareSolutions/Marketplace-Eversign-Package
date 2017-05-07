@@ -7,7 +7,7 @@ $app->post('/api/Eversign/useTemplate', function ($request, $response) {
 
     $settings = $this->settings;
     $checkRequest = $this->validation;
-    $validateRes = $checkRequest->validate($request, ['accessKey', 'businessId', 'templateId']);
+    $validateRes = $checkRequest->validate($request, ['accessKey', 'businessId', 'templateId', 'signers']);
     if (!empty($validateRes) && isset($validateRes['callback']) && $validateRes['callback'] == 'error') {
         return $response->withHeader('Content-type', 'application/json')->withStatus(200)->withJson($validateRes);
     } else {
@@ -40,24 +40,21 @@ $app->post('/api/Eversign/useTemplate', function ($request, $response) {
         }
     }
 
-    if (!empty($postData['args']['signers'])) {
-        if (is_array($postData['args']['signers'])) {
-            $json['signers'] = $postData['args']['signers'];
-        } else {
-            $dataSigners = $toJson->normalizeJson($postData['args']['signers']);
-            $dataSigners = str_replace('\"', '"', $dataSigners);
-            $json['signers'] = json_decode($dataSigners, true);
-            if (json_last_error()) {
-                $jsonErrors[] = 'signers';
-            }
+    if (is_array($postData['args']['signers'])) {
+        $json['signers'] = $postData['args']['signers'];
+    } else {
+        $dataSigners = $toJson->normalizeJson($postData['args']['signers']);
+        $dataSigners = str_replace('\"', '"', $dataSigners);
+        $json['signers'] = json_decode($dataSigners, true);
+        if (json_last_error()) {
+            $jsonErrors[] = 'signers';
         }
     }
 
     if (!empty($postData['args']['recipients'])) {
         if (is_array($postData['args']['recipients'])) {
             $json['recipients'] = $postData['args']['recipients'];
-        }
-        else {
+        } else {
             $dataRecipients = $toJson->normalizeJson($postData['args']['recipients']);
             $dataRecipients = str_replace('\"', '"', $dataRecipients);
             $json['recipients'] = json_decode($dataRecipients, true);
@@ -69,8 +66,7 @@ $app->post('/api/Eversign/useTemplate', function ($request, $response) {
     if (!empty($postData['args']['meta'])) {
         if (is_array($postData['args']['meta'])) {
             $json['meta'] = $postData['args']['meta'];
-        }
-        else {
+        } else {
             $dataMeta = $toJson->normalizeJson($postData['args']['recipients']);
             $dataMeta = str_replace('\"', '"', $dataMeta);
             $json['meta'] = json_decode($dataMeta, true);
@@ -144,8 +140,7 @@ $app->post('/api/Eversign/useTemplate', function ($request, $response) {
             $result['contextWrites']['to']['status_code'] = 'API_ERROR';
             $result['contextWrites']['to']['status_msg'] = json_decode($vendorResponseBody);
         }
-    }
-    else {
+    } else {
         $result['callback'] = 'error';
         $result['contextWrites']['to']['status_code'] = 'JSON_VALIDATION';
         $result['contextWrites']['to']['status_msg'] = $jsonErrors;
