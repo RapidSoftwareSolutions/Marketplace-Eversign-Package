@@ -21,15 +21,61 @@ $app->post('/api/Eversign/useTemplate', function ($request, $response) {
         'business_id' => $postData['args']['businessId'],
     ];
 
+    $json['template_id'] = $postData['args']['templateId'];
+
     $jsonErrors = [];
 
-    $json['files'] = json_decode($postData['args']['files'], true);
-    if (json_last_error()) {
-        $jsonErrors[] = 'files';
+    $toJson = new \Models\normilizeJson();
+
+    if (is_array($postData['args']['files'])) {
+        $json['files'] = $postData['args']['files'];
     }
-    $json['signers'] = json_decode($postData['args']['signers'], true);
-    if (json_last_error()) {
-        $jsonErrors[] = 'signers';
+    else {
+        $data = $toJson->normalizeJson($postData['args']['files']);
+        $data = str_replace('\"', '"', $data);
+        $json['files'] = json_decode($data, true);
+        if (json_last_error()) {
+            $jsonErrors[] = 'files';
+        }
+    }
+
+    if (is_array($postData['args']['signers'])) {
+        $json['signers'] = $postData['args']['signers'];
+    }
+    else {
+        $dataSigners = $toJson->normalizeJson($postData['args']['signers']);
+        $dataSigners = str_replace('\"', '"', $dataSigners);
+        $json['signers'] = json_decode($dataSigners, true);
+        if (json_last_error()) {
+            $jsonErrors[] = 'signers';
+        }
+    }
+
+    if (!empty($postData['args']['recipients'])) {
+        if (is_array($postData['args']['recipients'])) {
+            $json['recipients'] = $postData['args']['recipients'];
+        }
+        else {
+            $dataRecipients = $toJson->normalizeJson($postData['args']['recipients']);
+            $dataRecipients = str_replace('\"', '"', $dataRecipients);
+            $json['recipients'] = json_decode($dataRecipients, true);
+            if (json_last_error()) {
+                $jsonErrors[] = 'recipients';
+            }
+        }
+    }
+    if (!empty($postData['args']['meta'])) {
+        if (is_array($postData['args']['meta'])) {
+            $json['meta'] = $postData['args']['meta'];
+        }
+        else {
+            $dataMeta = $toJson->normalizeJson($postData['args']['recipients']);
+            $dataMeta = str_replace('\"', '"', $dataMeta);
+            $json['meta'] = json_decode($dataMeta, true);
+            if (json_last_error()) {
+                $jsonErrors[] = 'meta';
+            }
+        }
     }
 
     if (isset($postData['args']['isDraft']) && filter_var($postData['args']['isDraft'], FILTER_VALIDATE_BOOLEAN) == true) {
@@ -63,18 +109,6 @@ $app->post('/api/Eversign/useTemplate', function ($request, $response) {
         $json['recipients'] = json_decode($postData['args']['recipients'], true);
         if (json_last_error()) {
             $jsonErrors[] = 'recipients';
-        }
-    }
-    if (isset($postData['args']['meta'])) {
-        $json['meta'] = json_decode($postData['args']['meta'], true);
-        if (json_last_error()) {
-            $jsonErrors[] = 'meta';
-        }
-    }
-    if (isset($postData['args']['fields'])) {
-        $json['fields'] = json_decode($postData['args']['fields'], true);
-        if (json_last_error()) {
-            $jsonErrors[] = 'fields';
         }
     }
 
