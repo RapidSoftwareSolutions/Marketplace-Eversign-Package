@@ -20,7 +20,7 @@ A list of existing documents
 |-----------|------------|----------
 | accessKey | credentials| Access Key
 | businessId| Number     | Business ID
-| type      | String     | Document status. This parameter accepts the following status values: all, my_action_required, waiting_for_others, completed, drafts, cancelled
+| type      | String     | Document status. This parameter accepts the following status values: all, my_action_required, waiting_for_others, completed, drafts, cancelled. And templates variables: templates, templates_archived, template_drafts
 
 ## Eversign.getSingleDocument
 Get an existing document or template
