@@ -56,7 +56,8 @@
         },
         {
           "name": "type",
-          "type": "String",
+          "type": "Select",
+          "options": ["all", "my_action_required", "waiting_for_others", "completed", "drafts", "cancelled"],
           "info": "Document status. This parameter accepts the following status values: all, my_action_required, waiting_for_others, completed, drafts, cancelled",
           "required": true
         }
@@ -172,7 +173,7 @@
         },
         {
           "name": "expires",
-          "type": "String",
+          "type": "DatePicker",
           "info": "This parameter is used to specify a custom expiration date for your document. (Required format: Unix Time Stamp) If empty, the default document expiration period specified in your business settings will be used.",
           "required": false
         },
@@ -266,7 +267,7 @@
         },
         {
           "name": "expires",
-          "type": "String",
+          "type": "DatePicker",
           "info": "This parameter is used to specify a custom expiration date for your document. (Required format: Unix Time Stamp) If empty, the default document expiration period specified in your business settings will be used.",
           "required": false
         },

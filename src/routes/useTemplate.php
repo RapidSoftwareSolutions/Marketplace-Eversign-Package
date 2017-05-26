@@ -102,7 +102,13 @@ $app->post('/api/Eversign/useTemplate', function ($request, $response) {
         $json['client'] = $postData['args']['client'];
     }
     if (isset($postData['args']['expires']) && strlen($postData['args']['expires']) > 0) {
-        $json['expires'] = $postData['args']['expires'];
+        $date = new DateTime($postData['args']['expires']);
+        if (!$date) {
+            $json['expires'] = $postData['args']['expires'];
+        }
+        else {
+            $json['expires'] = $date->getTimestamp();
+        }
     }
 
     if (empty($jsonErrors)) {
