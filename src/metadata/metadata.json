@@ -57,7 +57,14 @@
         {
           "name": "type",
           "type": "Select",
-          "options": ["all", "my_action_required", "waiting_for_others", "completed", "drafts", "cancelled"],
+          "options": [
+            "all",
+            "my_action_required",
+            "waiting_for_others",
+            "completed",
+            "drafts",
+            "cancelled"
+          ],
           "info": "Document status. This parameter accepts the following status values: all, my_action_required, waiting_for_others, completed, drafts, cancelled",
           "required": true
         }
@@ -179,33 +186,241 @@
         },
         {
           "name": "files",
-          "type": "JSON",
+          "type": "Array",
           "info": "Document files can be uploaded to your document either by providing a URL, a reference to an existing file ID or through a base64 string. This object can contain multiple sub arrays.",
-          "required": true
+          "required": true,
+          "structure": [
+            {
+              "name": "name",
+              "type": "String",
+              "info": "Filename",
+              "required": true
+            },
+            {
+              "name": "fileId",
+              "type": "String",
+              "info": "File ID in sustem. Use uploadFile endpoint",
+              "required": false
+            },
+            {
+              "name": "fileUrl",
+              "type": "String",
+              "info": "Url to file",
+              "required": false
+            },
+            {
+              "name": "fileBase64",
+              "type": "String",
+              "info": "Base64 encoded content of file",
+              "required": false
+            }
+          ]
         },
         {
           "name": "signers",
-          "type": "JSON",
+          "type": "Array",
           "info": "This object must contain a sub array for each signer of the document being created. Each sub array requires a unique ID, name and email address.",
-          "required": true
+          "required": true,
+          "structure": [
+            {
+              "name": "id",
+              "type": "Number",
+              "info": "A unique identification number (integer) for this signer. We recommend numbering your signers from 1 to X.",
+              "required": true
+            },
+            {
+              "name": "name",
+              "type": "String",
+              "info": "This parameter is used to specify the full name of the current signer.",
+              "required": true
+            },
+            {
+              "name": "email",
+              "type": "String",
+              "info": "This parameter is used to specify the email address of the current signer.",
+              "required": true
+            },
+            {
+              "name": "order",
+              "type": "Number",
+              "info": "If the use_signer_order parameter is set to 1, set this parameter to the signer order number of the current signer.",
+              "required": false
+            },
+            {
+              "name": "pin",
+              "type": "Number",
+              "info": "This parameter is used to specify a Signer PIN for the current signer.",
+              "required": false
+            },
+            {
+              "name": "message",
+              "type": "String",
+              "info": "This parameter can be used to specify a custom message (upon document delivery) for the current signer. Please note that for the current signer the general document message will be overriden by this parameter.",
+              "required": false
+            }
+          ]
         },
         {
           "name": "recipients",
-          "type": "JSON",
-          "info": "This object can contain a sub array for each CC of the document to be signed. Name and email",
-          "required": false
+          "type": "Array",
+          "info": "This object can contain a sub array for each CC of the document to be signed. Structure: name*, email* (* - required)",
+          "required": false,
+          "structure": [
+            {
+              "name": "name",
+              "type": "String",
+              "info": "This parameter is used to specify the full name of the current CC.",
+              "required": true
+            },
+            {
+              "name": "email",
+              "type": "String",
+              "info": "This parameter is used to specify the email address of the current CC.",
+              "required": true
+            }
+          ]
         },
         {
           "name": "meta",
-          "type": "JSON",
+          "type": "Array",
           "info": "This object contains optional key-value data that should be attached to the document. This data will be included when making a GET call for the document created.",
-          "required": false
+          "required": false,
+          "structure": [
+            {
+              "name": "key",
+              "type": "String",
+              "info": "Meta key",
+              "required": true
+            },
+            {
+              "name": "value",
+              "type": "String",
+              "info": "Meta value",
+              "required": true
+            }
+          ]
         },
         {
           "name": "fields",
-          "type": "JSON",
+          "type": "Array",
           "info": "The fields that should be placed on the document, expressed as a 2-dimensional JSON array. One array of fields is required for each file provided in the files object. If a file has no fields, an empty array must be provided. ",
-          "required": false
+          "required": false,
+          "structure": [
+            {
+              "name": "type",
+              "type": "String",
+              "info": "The type of the field to be placed. Examples: signature, initials, date_signed, note, text, checkbox, radio, dropdown ,attachment",
+              "required": false
+            },
+            {
+              "name": "x",
+              "type": "String",
+              "info": "The field's horizontal margin from the left side of the document in pixels.",
+              "required": false
+            },
+            {
+              "name": "y",
+              "type": "String",
+              "info": "The field's vertical margin from the top of the document in pixels.",
+              "required": false
+            },
+            {
+              "name": "width",
+              "type": "Number",
+              "info": "The field's width in pixels.",
+              "required": false
+            },
+            {
+              "name": "height",
+              "type": "Number",
+              "info": "The field's height in pixels.",
+              "required": false
+            },
+            {
+              "name": "page",
+              "type": "Number",
+              "info": "The number of the document page where the field should be placed.",
+              "required": false
+            },
+            {
+              "name": "signer",
+              "type": "String",
+              "info": "The unique ID of the signer this field should be assigned to. If this field should become a No Signer field, please set this parameter to OWNER",
+              "required": false
+            },
+            {
+              "name": "name",
+              "type": "String",
+              "info": "The field's Field Label",
+              "required": false
+            },
+            {
+              "name": "identifier",
+              "type": "String",
+              "info": "The field's Field Identifier.",
+              "required": false
+            },
+            {
+              "name": "required",
+              "type": "Boolean",
+              "info": "Set to 1 in order to make this field a Required Field.",
+              "required": false
+            },
+            {
+              "name": "readonly",
+              "type": "Boolean",
+              "info": "Set to 1 in order to make this field a Read-Only Field.",
+              "required": false
+            },
+            {
+              "name": "validationType",
+              "type": "String",
+              "info": "Enable Field Validation for this field. Available validation types are email_address, letters_only and numbers_only.",
+              "required": false
+            },
+            {
+              "name": "textStyle",
+              "type": "String",
+              "info": "The letters B for bold, U for underlined and I for italic, in an order of your choice. Example: BUI",
+              "required": false
+            },
+            {
+              "name": "textFont",
+              "type": "String",
+              "info": "Set to the font identifier of your preferred font, e.g. arial. Jump to section Field Style to learn about supported fonts. Examples: arial, calibri, courier_new, helvetica, georgia, times_new_roman",
+              "required": false
+            },
+            {
+              "name": "textSize",
+              "type": "Number",
+              "info": "Set to your preferred font size number (string or integer), e.g. 16",
+              "required": false
+            },
+            {
+              "name": "textColor",
+              "type": "String",
+              "info": "Set to your preferred HEX color code, e.g. #FF0000",
+              "required": false
+            },
+            {
+              "name": "value",
+              "type": "String",
+              "info": "Set to 1 to mark checkbox or radio fields checked; or specify text content for note or text fields. For dropdown fields, set this parameter to an option value in order to pre-select it.",
+              "required": false
+            },
+            {
+              "name": "options",
+              "type": "String",
+              "info": "Comma-separated list of options. Example 'value 1', 'value2'",
+              "required": false
+            },
+            {
+              "name": "group",
+              "type": "Number",
+              "info": "This parameter is used to identify radio button groups. radio fields belonging to the same group must carry the same group parameter. Please note that this parameter must be numeric.",
+              "required": false
+            }
+          ]
         }
       ],
       "callbacks": [
@@ -273,21 +488,87 @@
         },
         {
           "name": "signers",
-          "type": "JSON",
+          "type": "Array",
           "info": "This object must contain a sub array for each signing role of your template.",
-          "required": true
+          "required": true,
+          "structure": [
+            {
+              "name": "role",
+              "type": "String",
+              "info": "The name of this signing role",
+              "required": true
+            },
+            {
+              "name": "name",
+              "type": "String",
+              "info": "This parameter is used to specify the full name of the current signer.",
+              "required": false
+            },
+            {
+              "name": "email",
+              "type": "String",
+              "info": "This parameter is used to specify the email address of the current signer.",
+              "required": false
+            },
+            {
+              "name": "pin",
+              "type": "String",
+              "info": "This parameter is used to specify a Signer PIN for the current signer.",
+              "required": false
+            },
+            {
+              "name": "message",
+              "type": "String",
+              "info": "This parameter can be used to specify a custom message (upon document delivery) for the current signer. Please note that for the current signer the general document message will be overriden by this parameter.",
+              "required": false
+            }
+          ]
         },
         {
           "name": "recipients",
-          "type": "JSON",
+          "type": "Array",
           "info": "This object can contain a sub array for each CC of the document to be signed. Name and email",
-          "required": false
+          "required": false,
+          "structure": [
+            {
+              "name": "role",
+              "type": "String",
+              "info": "The name of this CC role.",
+              "required": true
+            },
+            {
+              "name": "name",
+              "type": "String",
+              "info": "This parameter is used to specify the full name of the current CC.",
+              "required": true
+            },
+            {
+              "name": "email",
+              "type": "String",
+              "info": "This parameter is used to specify the email address of the current CC.",
+              "required": false
+            }
+          ]
         },
         {
           "name": "fields",
-          "type": "JSON",
-          "info": "This object must contain a sub array for each Merge Field of this template.",
-          "required": false
+          "type": "Array",
+          "info": "Array of fields with values",
+          "required": false,
+          "structure": [
+            {
+              "name": "key",
+              "type": "String",
+              "info": "Key name",
+              "required": false
+            },
+            {
+              "name": "value",
+              "type": "String",
+              "info": "Value",
+              "required": false
+            }
+          ]
         }
       ],
       "callbacks": [

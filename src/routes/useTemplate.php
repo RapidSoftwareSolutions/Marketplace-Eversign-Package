@@ -27,19 +27,6 @@ $app->post('/api/Eversign/useTemplate', function ($request, $response) {
 
     $toJson = new \Models\normilizeJson();
 
-    if (!empty($postData['args']['files'])) {
-        if (is_array($postData['args']['files'])) {
-            $json['files'] = $postData['args']['files'];
-        } else {
-            $data = $toJson->normalizeJson($postData['args']['files']);
-            $data = str_replace('\"', '"', $data);
-            $json['files'] = json_decode($data, true);
-            if (json_last_error()) {
-                $jsonErrors[] = 'files';
-            }
-        }
-    }
-
     if (is_array($postData['args']['signers'])) {
         $json['signers'] = $postData['args']['signers'];
     } else {
@@ -64,36 +51,17 @@ $app->post('/api/Eversign/useTemplate', function ($request, $response) {
         }
     }
 
-    if (!empty($postData['args']['meta'])) {
-        if (is_array($postData['args']['meta'])) {
-            $json['meta'] = $postData['args']['meta'];
-        } else {
-            $dataMeta = $toJson->normalizeJson($postData['args']['recipients']);
-            $dataMeta = str_replace('\"', '"', $dataMeta);
-            $json['meta'] = json_decode($dataMeta, true);
-            if (json_last_error()) {
-                $jsonErrors[] = 'meta';
-            }
+    if (!empty($postData['args']['fields'])) {
+        foreach ($json['fields'] as &$array) {
+            $json['fields'][$array['key']] = $array['value'];
         }
     }
 
-    if (isset($postData['args']['isDraft']) && filter_var($postData['args']['isDraft'], FILTER_VALIDATE_BOOLEAN) == true) {
-        $json['isDraft'] = 1;
-    }
     if (isset($postData['args']['title']) && strlen($postData['args']['title']) > 0) {
         $json['title'] = $postData['args']['title'];
     }
     if (isset($postData['args']['message']) && strlen($postData['args']['message']) > 0) {
         $json['message'] = $postData['args']['message'];
-    }
-    if (isset($postData['args']['useSignerOrder']) && filter_var($postData['args']['useSignerOrder'], FILTER_VALIDATE_BOOLEAN) == true) {
-        $json['useSignerOrder'] = 1;
-    }
-    if (isset($postData['args']['reminders']) && filter_var($postData['args']['reminders'], FILTER_VALIDATE_BOOLEAN) == true) {
-        $json['reminders'] = 1;
-    }
-    if (isset($postData['args']['requireAllSigners']) && filter_var($postData['args']['requireAllSigners'], FILTER_VALIDATE_BOOLEAN) == true) {
-        $json['requireAllSigners'] = 1;
     }
     if (isset($postData['args']['redirect']) && strlen($postData['args']['redirect']) > 0) {
         $json['redirect'] = $postData['args']['redirect'];

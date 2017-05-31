@@ -27,8 +27,7 @@ $app->post('/api/Eversign/createDocument', function ($request, $response) {
 
     if (is_array($postData['args']['files'])) {
         $json['files'] = $postData['args']['files'];
-    }
-    else {
+    } else {
         $data = $toJson->normalizeJson($postData['args']['files']);
         $data = str_replace('\"', '"', $data);
         $json['files'] = json_decode($data, true);
@@ -37,10 +36,24 @@ $app->post('/api/Eversign/createDocument', function ($request, $response) {
         }
     }
 
+    if (!empty($json['files'])) {
+        foreach ($json['files'] as &$array) {
+            if (!empty($array['fileId'])) {
+                $array['file_id'] = $array['fileId'];
+            }
+            if (!empty($array['fileUrl'])) {
+                $array['file_url'] = $array['fileUrl'];
+            }
+            if (!empty($array['fileBase64'])) {
+                $array['file_base64'] = $array['fileBase64'];
+            }
+            unset($array['fileId'], $array['fileUrl'], $array['fileBase64']);
+        }
+    }
+
     if (is_array($postData['args']['signers'])) {
         $json['signers'] = $postData['args']['signers'];
-    }
-    else {
+    } else {
         $dataSigners = $toJson->normalizeJson($postData['args']['signers']);
         $dataSigners = str_replace('\"', '"', $dataSigners);
         $json['signers'] = json_decode($dataSigners, true);
@@ -52,8 +65,7 @@ $app->post('/api/Eversign/createDocument', function ($request, $response) {
     if (!empty($postData['args']['recipients'])) {
         if (is_array($postData['args']['recipients'])) {
             $json['recipients'] = $postData['args']['recipients'];
-        }
-        else {
+        } else {
             $dataRecipients = $toJson->normalizeJson($postData['args']['recipients']);
             $dataRecipients = str_replace('\"', '"', $dataRecipients);
             $json['recipients'] = json_decode($dataRecipients, true);
@@ -64,10 +76,11 @@ $app->post('/api/Eversign/createDocument', function ($request, $response) {
     }
     if (!empty($postData['args']['meta'])) {
         if (is_array($postData['args']['meta'])) {
-            $json['meta'] = $postData['args']['meta'];
-        }
-        else {
-            $dataMeta = $toJson->normalizeJson($postData['args']['recipients']);
+            foreach ($postData['args']['meta'] as $meta) {
+                $json['meta'][$meta['key']] = $meta['value'];
+            }
+        } else {
+            $dataMeta = $toJson->normalizeJson($postData['args']['meta']);
             $dataMeta = str_replace('\"', '"', $dataMeta);
             $json['meta'] = json_decode($dataMeta, true);
             if (json_last_error()) {
@@ -78,14 +91,43 @@ $app->post('/api/Eversign/createDocument', function ($request, $response) {
     if (!empty($postData['args']['fields'])) {
         if (is_array($postData['args']['fields'])) {
             $json['fields'] = $postData['args']['fields'];
-        }
-        else {
+        } else {
             $dataFields = $toJson->normalizeJson($postData['args']['fields']);
             $dataFields = str_replace('\"', '"', $dataFields);
             $json['fields'] = json_decode($dataFields, true);
             if (json_last_error()) {
                 $jsonErrors[] = 'fields';
             }
+        }
+    }
+
+    if (!empty($json['fields'])) {
+        foreach ($json['fields'] as &$array) {
+            if (isset($array['validationType'])) {
+                $array['validation_type'] = $array['validationType'];
+            }
+            if (isset($array['textStyle'])) {
+                $array['text_style'] = $array['textStyle'];
+            }
+            if (isset($array['textFont'])) {
+                $array['text_font'] = $array['textFont'];
+            }
+            if (isset($array['textSize'])) {
+                $array['text_size'] = $array['textSize'];
+            }
+            if (isset($array['textColor'])) {
+                $array['text_color'] = $array['textColor'];
+            }
+            if (isset($array['options'])) {
+                $array['options'] = explode(',', $array['options']);
+            }
+            unset(
+                $array['validationType'],
+                $array['textStyle'],
+                $array['textFont'],
+                $array['textSize'],
+                $array['textColor']
+            );
         }
     }
 
@@ -117,8 +159,7 @@ $app->post('/api/Eversign/createDocument', function ($request, $response) {
         $date = new DateTime($postData['args']['expires']);
         if (!$date) {
             $json['expires'] = $postData['args']['expires'];
-        }
-        else {
+        } else {
             $json['expires'] = $date->getTimestamp();
         }
     }
@@ -153,8 +194,7 @@ $app->post('/api/Eversign/createDocument', function ($request, $response) {
             $result['contextWrites']['to']['status_code'] = 'API_ERROR';
             $result['contextWrites']['to']['status_msg'] = json_decode($vendorResponseBody);
         }
-    }
-    else {
+    } else {
         $result['callback'] = 'error';
         $result['contextWrites']['to']['status_code'] = 'JSON_VALIDATION';
         $result['contextWrites']['to']['status_msg'] = $jsonErrors;
